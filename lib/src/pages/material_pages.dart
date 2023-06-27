@@ -67,15 +67,14 @@ Future<CropImageResult?> showMaterialImageCropper(
         heroTag: heroTag,
         controller: controller,
         shouldPopAfterCrop: shouldPopAfterCrop,
+        materialCroppableImageController: controller,
       ),
     );
   }
 
   if (context.mounted) {
     return Navigator.of(context).push<CropImageResult?>(
-      heroTag != null
-          ? CupertinoImageCropperWithHeroRoute(builder: builder)
-          : MaterialPageRoute(builder: builder),
+      heroTag != null ? CupertinoImageCropperWithHeroRoute(builder: builder) : MaterialPageRoute(builder: builder),
     );
   }
 

@@ -26,8 +26,7 @@ class CropSettings {
   }) {
     return CropSettings(
       cropShapeFn: cropShapeFn ?? this.cropShapeFn,
-      enabledTransformations:
-          enabledTransformations ?? this.enabledTransformations,
+      enabledTransformations: enabledTransformations ?? this.enabledTransformations,
       forcedAspectRatio: forcedAspectRatio ?? this.forcedAspectRatio,
     );
   }
@@ -151,9 +150,7 @@ class _SettingsModalWidgetState extends State<SettingsModalWidget> {
                       );
                     } else {
                       _settings = _settings.copyWith(
-                        enabledTransformations: _settings.enabledTransformations
-                            .where((e) => e != v)
-                            .toList(),
+                        enabledTransformations: _settings.enabledTransformations.where((e) => e != v).toList(),
                       );
                     }
                   });

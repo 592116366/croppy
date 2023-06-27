@@ -25,26 +25,18 @@ class MaterialImageCropperToolbar extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (controller is MaterialCroppableImageController &&
-                          (controller as MaterialCroppableImageController)
-                                  .allowedAspectRatios
-                                  .length >
-                              1) ...[
+                      if (controller is MaterialCroppableImageController && (controller as MaterialCroppableImageController).allowedAspectRatios.length > 1) ...[
                         SizedBox.square(
                           dimension: 48.0,
                           child: ValueListenableBuilder(
-                            valueListenable:
-                                (controller as MaterialCroppableImageController)
-                                    .aspectRatioNotifier,
+                            valueListenable: (controller as MaterialCroppableImageController).aspectRatioNotifier,
                             builder: (context, ar, _) => IconButton(
                               onPressed: () {
                                 showModalBottomSheet(
                                   context: context,
                                   clipBehavior: Clip.antiAlias,
-                                  builder: (_) =>
-                                      MaterialAspectRatioBottomSheet(
-                                    controller: controller
-                                        as MaterialCroppableImageController,
+                                  builder: (_) => MaterialAspectRatioBottomSheet(
+                                    controller: controller as MaterialCroppableImageController,
                                   ),
                                 );
                               },
@@ -55,8 +47,7 @@ class MaterialImageCropperToolbar extends StatelessWidget {
                         ),
                         const SizedBox(width: 16.0),
                       ],
-                      if (controller
-                          .isTransformationEnabled(Transformation.rotate))
+                      if (controller.isTransformationEnabled(Transformation.rotate))
                         SizedBox.square(
                           dimension: 48.0,
                           child: ValueListenableBuilder(

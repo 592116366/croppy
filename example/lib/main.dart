@@ -8,6 +8,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 void main() {
   if (!kIsWeb) {
     // For some reason, the C++ implementation of the Cassowary solver is super
@@ -27,28 +29,38 @@ class ExampleScrollBehavior extends MaterialScrollBehavior {
       };
 
   @override
-  ScrollPhysics getScrollPhysics(BuildContext context) =>
-      const BouncingScrollPhysics();
+  ScrollPhysics getScrollPhysics(BuildContext context) => const BouncingScrollPhysics();
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  ScreenUtilInit screenUtilInit({required Widget child}) {
+    return ScreenUtilInit(
+      designSize: const Size(750, 1136),
+      splitScreenMode: true,
+      minTextAdapt: true,
+      builder: (context, _) => child,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Croppy Demo',
-      scrollBehavior: ExampleScrollBehavior(),
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.orange,
-          primary: Colors.orange,
-          brightness: Brightness.dark,
+    return screenUtilInit(
+      child: MaterialApp(
+        title: 'Croppy Demo',
+        scrollBehavior: ExampleScrollBehavior(),
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.orange,
+            primary: Colors.orange,
+            brightness: Brightness.dark,
+          ),
+          useMaterial3: true,
         ),
-        useMaterial3: true,
+        debugShowCheckedModeBanner: false,
+        home: const MyHomePage(),
       ),
-      debugShowCheckedModeBanner: false,
-      home: const MyHomePage(),
     );
   }
 }
@@ -126,9 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 initialData: _data[page],
                 cropPathFn: _cropSettings.cropShapeFn,
                 enabledTransformations: _cropSettings.enabledTransformations,
-                allowedAspectRatios: _cropSettings.forcedAspectRatio != null
-                    ? [_cropSettings.forcedAspectRatio!]
-                    : null,
+                allowedAspectRatios: _cropSettings.forcedAspectRatio != null ? [_cropSettings.forcedAspectRatio!] : null,
                 postProcessFn: (result) async {
                   _croppedImage[page]?.dispose();
 
@@ -156,9 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 initialData: _data[page],
                 cropPathFn: _cropSettings.cropShapeFn,
                 enabledTransformations: _cropSettings.enabledTransformations,
-                allowedAspectRatios: _cropSettings.forcedAspectRatio != null
-                    ? [_cropSettings.forcedAspectRatio!]
-                    : null,
+                allowedAspectRatios: _cropSettings.forcedAspectRatio != null ? [_cropSettings.forcedAspectRatio!] : null,
                 postProcessFn: (result) async {
                   _croppedImage[page]?.dispose();
 
@@ -213,14 +221,11 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Center(
                 child: Hero(
                   tag: 'image-$i',
-                  placeholderBuilder: (context, size, child) =>
-                      Visibility.maintain(
+                  placeholderBuilder: (context, size, child) => Visibility.maintain(
                     visible: false,
                     child: child,
                   ),
-                  child: _croppedImage[i] != null
-                      ? RawImage(image: _croppedImage[i])
-                      : Image(image: _imageProviders[i]),
+                  child: _croppedImage[i] != null ? RawImage(image: _croppedImage[i]) : Image(image: _imageProviders[i]),
                 ),
               ),
             );
