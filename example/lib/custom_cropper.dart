@@ -68,8 +68,7 @@ class CustomCropper extends StatelessWidget {
                       child: const Text('Done'),
                       onPressed: () async {
                         // Enable the Hero animations
-                        CroppableImagePageAnimator.of(context)
-                            ?.setHeroesEnabled(true);
+                        CroppableImagePageAnimator.of(context)?.setHeroesEnabled(true);
 
                         // Crop the image
                         final result = await controller.crop();
@@ -87,8 +86,7 @@ class CustomCropper extends StatelessWidget {
                   padding: const EdgeInsets.all(32.0),
                   child: AnimatedCroppableImageViewport(
                     controller: controller,
-                    cropHandlesBuilder: (context) =>
-                        MaterialImageCropperHandles(
+                    cropHandlesBuilder: (context) => MaterialImageCropperHandles(
                       controller: controller,
                       gesturePadding: 16.0,
                     ),

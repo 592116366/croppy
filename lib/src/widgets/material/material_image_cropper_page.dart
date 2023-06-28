@@ -19,6 +19,7 @@ class MaterialImageCropperPage extends StatelessWidget {
   final bool shouldPopAfterCrop;
 
   Widget _buildButton({String? btnText, Function? onTap}) {
+    ///需要改成防连点 todo
     return InkWell(
       onTap: () {
         onTap?.call();
@@ -64,6 +65,7 @@ class MaterialImageCropperPage extends StatelessWidget {
                             cropHandlesBuilder: (context) => MaterialImageCropperHandles(
                               controller: controller,
                               gesturePadding: gesturePadding,
+                              cornerColor: Color.fromRGBO(255, 186, 32, 1),
                             ),
                           ),
                         ),
@@ -120,17 +122,17 @@ class MaterialImageCropperPage extends StatelessWidget {
                     ),
 
                     ///
-                    // RepaintBoundary(
-                    //   child: AnimatedBuilder(
-                    //     animation: overlayOpacityAnimation,
-                    //     builder: (context, _) => Opacity(
-                    //       opacity: overlayOpacityAnimation.value,
-                    //       child: MaterialImageCropperToolbar(
-                    //         controller: controller,
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
+                    RepaintBoundary(
+                      child: AnimatedBuilder(
+                        animation: overlayOpacityAnimation,
+                        builder: (context, _) => Opacity(
+                          opacity: overlayOpacityAnimation.value,
+                          child: MaterialImageCropperToolbar(
+                            controller: controller,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

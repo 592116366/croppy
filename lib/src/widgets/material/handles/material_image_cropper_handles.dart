@@ -1,5 +1,6 @@
 import 'package:croppy/src/src.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MaterialImageCropperHandles extends StatelessWidget {
   const MaterialImageCropperHandles({
@@ -49,10 +50,7 @@ class MaterialImageCropperHandles extends StatelessWidget {
           ListenableBuilder(
             listenable: controller.isTransformingNotifier,
             builder: (context, child) => AnimatedOpacity(
-              opacity: controller.isTransformingNotifier.value &&
-                      controller.isRotatingZ
-                  ? 1.0
-                  : 0.0,
+              opacity: controller.isTransformingNotifier.value && controller.isRotatingZ ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 100),
               curve: Curves.easeInOut,
               child: child,
@@ -85,18 +83,76 @@ class _MaterialImageCropperCornersPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = color;
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 3.w;
 
     final path = cropShape.getTransformedPathForSize(size);
 
+    double lineSize = 20;
+    double lineWeight = 4.w;
+
+    Offset? leftTop;
+    Offset? rightTop;
+    Offset? leftDown;
+    Offset? rightDown;
+
+    // canvas.drawPath(Path., paint);
+
     for (final point in path.toApproximatePolygon().vertices) {
-      canvas.drawCircle(point.offset, 4.0, paint);
+      // canvas.drawCircle(point.offset, 4.0, paint);
+      double imageWight = point.offset.dx;
+      double imageHeight = point.offset.dy;
+
+      Offset offset = Offset(point.offset.dx, point.offset.dy);
+
+      ///左上角的点
+      if (point.offset.dx == 0 && point.offset.dy == 0) {
+        //横线
+        canvas.drawRect(Rect.fromPoints(Offset(-lineWeight, 0), Offset(lineSize - lineWeight, -lineWeight)), paint);
+        //竖线
+        canvas.drawRect(Rect.fromPoints(Offset(-lineWeight, -lineWeight), Offset(0, lineSize - lineWeight)), paint);
+
+        leftTop = offset;
+      }
+
+      ///右上
+      if (point.offset.dx > 0 && point.offset.dy == 0) {
+        //横线
+        canvas.drawRect(Rect.fromPoints(Offset(imageWight - lineSize + lineWeight, 0), Offset(imageWight + lineWeight, -lineWeight)), paint);
+        //竖线
+        canvas.drawRect(Rect.fromPoints(Offset(imageWight, -lineWeight), Offset(imageWight + lineWeight, lineSize - lineWeight)), paint);
+        rightTop = offset;
+      }
+
+      ///左下
+      if (point.offset.dx == 0 && point.offset.dy > 0) {
+        //横线
+        canvas.drawRect(Rect.fromPoints(Offset(-lineWeight, imageHeight), Offset(lineSize - lineWeight, imageHeight + lineWeight)), paint);
+        //竖线
+        canvas.drawRect(Rect.fromPoints(Offset(-lineWeight, imageHeight + lineWeight - lineSize), Offset(0, imageHeight + lineWeight)), paint);
+        leftDown = offset;
+      }
+
+      ///右下
+      if (point.offset.dx > 0 && point.offset.dy > 0) {
+        //横线
+        canvas.drawRect(Rect.fromPoints(Offset(imageWight - lineSize + lineWeight, imageHeight), Offset(imageWight + lineWeight, imageHeight + lineWeight)), paint);
+        //竖线
+        canvas.drawRect(Rect.fromPoints(Offset(imageWight, imageHeight + lineWeight - lineSize), Offset(imageWight + lineWeight, imageHeight + lineWeight)), paint);
+        rightDown = offset;
+      }
+    }
+    if (leftTop != null && rightTop != null && leftDown != null && rightDown != null) {
+      canvas.drawLine(leftTop, rightTop, paint);
+      canvas.drawLine(rightTop, rightDown, paint);
+      canvas.drawLine(rightDown, leftDown, paint);
+      canvas.drawLine(leftDown, leftTop, paint);
     }
   }
 
   @override
-  bool shouldRepaint(_MaterialImageCropperCornersPainter oldDelegate) =>
-      oldDelegate.cropShape != cropShape;
+  bool shouldRepaint(_MaterialImageCropperCornersPainter oldDelegate) => oldDelegate.cropShape != cropShape;
 }
 
 class _MaterialImageCropperGuidesPainter extends CustomPainter {
@@ -242,6 +298,5 @@ class _MaterialImageCropperFineGuidesPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_MaterialImageCropperFineGuidesPainter oldDelegate) =>
-      true;
+  bool shouldRepaint(_MaterialImageCropperFineGuidesPainter oldDelegate) => true;
 }

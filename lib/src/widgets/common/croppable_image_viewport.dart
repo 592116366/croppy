@@ -2,11 +2,11 @@ import 'package:croppy/src/src.dart';
 import 'package:flutter/material.dart';
 
 /// A widget that displays the croppable image.
-/// 
+///
 /// This widget is responsible for displaying the croppable image, the cropped
 /// image that participates in a Hero animation, and computes the size of the
 /// viewport.
-/// 
+///
 /// By default, the crop area is centered in the viewport.
 class CroppableImageViewport extends StatelessWidget {
   const CroppableImageViewport({
@@ -55,8 +55,7 @@ class CroppableImageViewport extends StatelessWidget {
               Center(
                 child: Hero(
                   tag: heroTag!,
-                  flightShuttleBuilder: (flightContext, animation,
-                      flightDirection, fromHeroContext, toHeroContext) {
+                  flightShuttleBuilder: (flightContext, animation, flightDirection, fromHeroContext, toHeroContext) {
                     return _buildHeroChild(context);
                   },
                   child: Visibility.maintain(

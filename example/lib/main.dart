@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:croppy/croppy.dart';
@@ -84,14 +85,23 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     final random = Random();
-    for (var i = 0; i < 80; i++) {
+    for (var i = 0; i < 10; i++) {
       final image = NetworkImage(
         'https://test-photos-qklwjen.s3.eu-west-3.amazonaws.com/image${random.nextInt(80) + 1}.jpg',
         headers: const {'accept': '*/*'},
       );
 
+      /// 网络图片 如上 (如有特殊需要 当然也可以保留原项目 先网络下载到本地再使用)
+      /// 项目下的 本地资源 可以 FileImage 转为 ImageProvider 获取 _imageProviders todo.
+      /// 目标:使用方只需要传 url
+
       _imageProviders.add(image);
     }
+    // String localImageUrl = '/storage/emulated/0/Pictures/1687915733219.jpg';
+    //
+    // final localImage = (localImageUrl);
+    //
+    // _imageProviders.add(localImage);
   }
 
   @override
@@ -103,6 +113,17 @@ class _MyHomePageState extends State<MyHomePage> {
   final _imageProviders = <ImageProvider>[];
   final _data = <int, CroppableImageData>{};
   final _croppedImage = <int, ui.Image>{};
+
+  //保存一个Image
+  Future<File?> saveImage(ui.Image image, String path, {format = ui.ImageByteFormat.png}) async {
+    var file = File(path);
+    if (!await file.exists()) {
+      await file.create(recursive: true);
+    }
+    ByteData? byteData = await image.toByteData(format: format);
+    Uint8List? pngBytes = byteData?.buffer.asUint8List();
+    return pngBytes != null ? file.writeAsBytes(pngBytes) : null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,6 +162,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 allowedAspectRatios: _cropSettings.forcedAspectRatio != null ? [_cropSettings.forcedAspectRatio!] : null,
                 postProcessFn: (result) async {
                   _croppedImage[page]?.dispose();
+
+                  CropImageResult r;
+                  // 如何将一个Image对象保存到本地？Image对象可以转化成字节流，再通过文件写入。
 
                   setState(() {
                     _croppedImage[page] = result.uiImage;

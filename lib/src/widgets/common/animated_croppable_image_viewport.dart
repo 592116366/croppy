@@ -31,13 +31,10 @@ class AnimatedCroppableImageViewport extends StatefulWidget {
   final WidgetBuilder cropHandlesBuilder;
 
   @override
-  State<AnimatedCroppableImageViewport> createState() =>
-      _AnimatedCroppableImageViewportState();
+  State<AnimatedCroppableImageViewport> createState() => _AnimatedCroppableImageViewportState();
 }
 
-class _AnimatedCroppableImageViewportState
-    extends State<AnimatedCroppableImageViewport>
-    with SingleTickerProviderStateMixin {
+class _AnimatedCroppableImageViewportState extends State<AnimatedCroppableImageViewport> with SingleTickerProviderStateMixin {
   late final AnimationController _backgroundOpacityAnimationController;
   late final Animation<double> _backgroundOpacityAnimation;
 
@@ -72,8 +69,7 @@ class _AnimatedCroppableImageViewportState
   double get _backgroundOpacity {
     final value = _backgroundOpacityAnimation.value;
 
-    return widget.minBackgroundOpacity +
-        (widget.maxBackgroundOpacity - widget.minBackgroundOpacity) * value;
+    return widget.minBackgroundOpacity + (widget.maxBackgroundOpacity - widget.minBackgroundOpacity) * value;
   }
 
   @override
@@ -109,7 +105,14 @@ class _AnimatedCroppableImageViewportState
               controller: widget.controller,
               overlayOpacity: widget.overlayOpacityAnimation.value,
               backgroundOpacity: _backgroundOpacity,
-              image: Image(image: widget.controller.imageProvider),
+              image:
+                  // Container(
+                  //   width: 100,
+                  //   height: 100,
+                  //   color: Colors.orange,
+                  // ),
+                  ///图片组件
+                  Image(image: widget.controller.imageProvider),
               cropHandles: widget.cropHandlesBuilder(context),
               gesturePadding: widget.gesturePadding,
             ),

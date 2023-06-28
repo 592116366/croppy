@@ -4,9 +4,9 @@ import 'package:croppy/src/src.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+///图形辅助修饰线
 /// TODO: Document this
-class CroppableImageWidget extends RenderObjectWidget
-    with SlottedMultiChildRenderObjectWidgetMixin<EditableImageSlot> {
+class CroppableImageWidget extends RenderObjectWidget with SlottedMultiChildRenderObjectWidgetMixin<EditableImageSlot> {
   const CroppableImageWidget({
     super.key,
     required this.controller,
@@ -26,9 +26,7 @@ class CroppableImageWidget extends RenderObjectWidget
 
   @override
   CroppableImageRenderObject createRenderObject(BuildContext context) {
-    final staticCropRect = (controller is ResizeStaticLayoutMixin)
-        ? (controller as ResizeStaticLayoutMixin).staticCropRect
-        : null;
+    final staticCropRect = (controller is ResizeStaticLayoutMixin) ? (controller as ResizeStaticLayoutMixin).staticCropRect : null;
 
     return CroppableImageRenderObject(
       controller.data,
@@ -50,9 +48,7 @@ class CroppableImageWidget extends RenderObjectWidget
     renderObject.gesturePadding = gesturePadding;
     renderObject.overlayOpacity = overlayOpacity;
     renderObject.backgroundOpacity = backgroundOpacity;
-    renderObject.staticCropRect = (controller is ResizeStaticLayoutMixin)
-        ? (controller as ResizeStaticLayoutMixin).staticCropRect
-        : null;
+    renderObject.staticCropRect = (controller is ResizeStaticLayoutMixin) ? (controller as ResizeStaticLayoutMixin).staticCropRect : null;
   }
 
   @override
@@ -74,8 +70,7 @@ enum EditableImageSlot {
   handles,
 }
 
-class CroppableImageRenderObject extends RenderBox
-    with SlottedContainerRenderObjectMixin<EditableImageSlot> {
+class CroppableImageRenderObject extends RenderBox with SlottedContainerRenderObjectMixin<EditableImageSlot> {
   CroppableImageRenderObject(
     CroppableImageData imageData,
     double viewportScale,
@@ -161,11 +156,9 @@ class CroppableImageRenderObject extends RenderBox
     scaledSize *= viewportScale;
     layoutSize *= viewportScale;
 
-    scaledSize =
-        constraints.constrainSizeAndAttemptToPreserveAspectRatio(scaledSize);
+    scaledSize = constraints.constrainSizeAndAttemptToPreserveAspectRatio(scaledSize);
 
-    layoutSize =
-        constraints.constrainSizeAndAttemptToPreserveAspectRatio(layoutSize);
+    layoutSize = constraints.constrainSizeAndAttemptToPreserveAspectRatio(layoutSize);
 
     image!.layout(
       BoxConstraints.tight(imageData.imageSize),
@@ -301,17 +294,15 @@ class CroppableImageRenderObject extends RenderBox
     final _layoutCropRect = staticCropRect ?? imageData.cropRect;
 
     final scaleTransform = Matrix4.identity()..scale(viewportScale);
-    final translationTransform = Matrix4.identity()
-      ..translate(-_layoutCropRect.left, -_layoutCropRect.top);
+    final translationTransform = Matrix4.identity()..translate(-_layoutCropRect.left, -_layoutCropRect.top);
 
-    final Matrix4 matrix =
-        scaleTransform * translationTransform * imageData.totalImageTransform;
+    final Matrix4 matrix = scaleTransform * translationTransform * imageData.totalImageTransform;
 
     paintBackgroundImage(context, _offset, matrix);
 
-    final cropRect =
-        additionalOffset & (imageData.cropRect.size * viewportScale);
+    final cropRect = additionalOffset & (imageData.cropRect.size * viewportScale);
 
+    ///绘制图片组件
     paintCroppedImage(
       context,
       _offset,
